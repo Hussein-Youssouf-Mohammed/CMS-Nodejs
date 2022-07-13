@@ -1,0 +1,107 @@
+@layout('layouts.admin')
+@section('content')
+<div class="d-flex justify-content-end my-5">
+    <button class="btn btn-primary" data-toggle="modal" data-target="#addCategory">Add Category</button>
+</div>
+<div class="card my-5">
+    <div class="card-header">Categories List</div>
+    <div class="card-body">
+      <table class="table table-bordered table-hover">
+          <thead>
+              <td>Name</td>
+              <td>Action</td>
+          </thead>
+          <tbody>
+              @each(category in categories)
+                    <tr>
+                        <td> {{ category.name }} </td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editCategory"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCategory"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+
+                    <!-- model delete category -->
+                    
+                    <div class="modal fade" id="deleteCategory" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                           <form action="/admin/categoires/{{ category._id }}" method="POST">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                        <h5 class="modal-title">Delete Category</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                    </div>
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                   <h6> <strong>Are you sure you want delete this category?</strong> </h6>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">No go back</button>
+                                <button type="submit" class="btn btn-danger">Delete category</button>
+                            </div>
+                        </div>
+                           </form>
+                        </div>
+                    </div>
+                    <!-- model delete category -->
+
+                    <!-- modal Edit Category -->
+                    <!-- Modal -->
+                    <div class="modal fade" id="editCategory" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <form action="/admin/categoires/update/{{ category._id }}" method="POST">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Edit Category</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                    </div>
+                                    <div class="modal-body">
+                                       <div class="form-group">
+                                           <input type="text" name="name" value="{{ category.name }}" placeholder="Enter Name of category" autocomplete="off" class="form-control">
+                                       </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Update Category</button>
+                                    </div>
+                                </div>
+                               </form>
+                        </div>
+                    </div>
+                    <!-- modal Edit Category -->
+              @endeach
+          </tbody>
+      </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addCategory" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+       <form action="/admin/categoires" method="POST">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Category</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+               <div class="form-group">
+                   <input type="text" name="name" placeholder="Enter Name of category" autocomplete="off" class="form-control">
+               </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add Category</button>
+            </div>
+        </div>
+       </form>
+    </div>
+</div>
+@endsection

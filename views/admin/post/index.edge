@@ -1,0 +1,175 @@
+@layout('layouts.admin')
+@section('content')
+<div class="d-flex justify-content-end">
+    <button class="btn btn-primary my-4" data-toggle='modal' data-target='#addPost'>Add post</button>
+</div>
+<div class="card">
+    @if(errors.length > 0)
+      <ul class="list-group">
+          @each(error in errors)
+          <li class="list-group-item text-danger">{{ error }}</li>
+          @endeach
+      </ul>
+    @endif
+    
+    <div class="card-body">
+        <table id="datatable" class="table table-bordered table-hover">
+            <thead>
+                <th>Body</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Category Name</th>
+                <th>Image</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                @each(post in posts)
+                <tr>
+                    <td> {{ post.body }} </td>
+                    <td> {{ post.title }} </td>
+                    <td> {{ post.status }} </td>
+                    <td> {{ post.category.name }} </td>
+                    <td> <img src="{{ post.image }}" class="img-fluid" width="100" alt=""> </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editPost{{ post._id }}"><i class="fa fa-edit"></i></button>
+                        <button class="btn btn-danger  btn-sm" data-toggle="modal" data-target="#deletePost{{ post._id }}"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+
+                {{--  modal edit post  --}}
+                <!-- Button trigger modal -->
+                <div class="modal fade" id="editPost{{ post._id }}" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <form action="/admin/posts/edit/{{ post._id }}" method="POST">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Update Post</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <input type="text" placeholder="Enter title" value="{{ post.title }}" name="title" id="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea name="body" placeholder="Enter body" id="" rows="5" class="form-control">{{ post.body }}</textarea>
+                                    </div>
+                
+                                    <div class="form-group">
+                                        <label for="status">Select status</label>
+                                      <select name="status" id="" class="form-control">
+                                          <option value="public" {{ post.status == 'public' ? 'selected' : '' }}>Public</option>
+                                          <option value="private" {{ post.status == 'private' ? 'selected' : '' }} >Private</option>
+                                          <option value="modar" {{ post.status == 'modar' ? 'selected' : '' }}>modar</option>
+                                      </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="checkbox" name="allowComment" {{ post.allowComment == true ? 'checked' : '' }} class="ml-3" id="">
+                                    <label for="allowComment">AllowComments</label>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Update Post</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {{--  modal edit post  --}}
+                <!-- start delete modal post -->
+                
+                    <div class="modal fade" id="deletePost{{ post._id }}" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <form action="/admin/posts/delete/{{ post._id }}" method="post">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Delete post</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <strong>Are you sure you want delete is post?</strong>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">No , go back</button>
+                                        <button type="submit" class="btn btn-danger">Yes delete</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                <!-- end delete modal post -->
+                <!-- end -->
+                @endeach
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Button trigger modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="addPost" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="/admin/posts/create" method="POST" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Post</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="text" placeholder="Enter title" name="title" id="" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <textarea name="body" placeholder="Enter body" id="" rows="5" class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Select Date</label>
+                        <input type="date" placeholder="Enter title" name="createdAt" id="" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Select status</label>
+                      <select name="status" id="" class="form-control">
+                          <option value="public">Public</option>
+                          <option value="private">Private</option>
+                          <option value="modar">modar</option>
+                      </select>
+                    </div>
+                
+            
+                    <div class="form-group">
+                        <label for="status">Select category</label>
+                      <select name="category" id="" class="form-control">
+                          <option>Select category</option>
+                          @each(category in categories)
+                          <option value="{{ category._id}}"> {{ category.name }} </option>
+                          @endeach
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Select Image</label>
+                        <input type="file"  name="image" id="" class="form-control">
+                    </div>
+               
+                <div class="form-group">
+                    <input type="checkbox" name="allowComment" class="ml-3" id="">
+                    <label for="allowComment">AllowComments</label>
+                </div>
+                
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection

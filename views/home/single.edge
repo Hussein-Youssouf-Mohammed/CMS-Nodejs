@@ -1,0 +1,40 @@
+@layout('layouts.front-end')
+@section('content')
+
+            
+        <!-- Nested row for non-featured blog posts-->
+            
+            <div class="col-lg-8">
+                <!-- Blog post-->
+               <div class="card mb-4">
+                <a href="#!"><img class="card-img-top" src="{{ post.image }}" alt="..." /></a>
+                <div class="card-body">
+                    <div class="small text-muted">January 1, 2022</div>
+                    <h2 class="card-title h4">{{ post.title}}</h2>
+                    <p class="card-text">{{ post.body }}</p>
+                    <a class="btn btn-primary" href="/post/{{ post._id}}">Read more →</a>
+                </div>
+            </div>
+            <!-- Blog post-->
+
+            <div class="mt-4">
+                <div class="card">
+                    <div class="card-header">Leave Comment</div>
+                    <div class="card-body">
+                       <form action="">
+                           <div class="form-group">
+                               <textarea name="" class="form-control" id=""  rows="5"></textarea>
+                           </div>
+                           <div class="form-group">
+                               <button class="btn btn-primary mt-4">Add Comment</button>
+                           </div>
+                       </form>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        @include('includes.sidebar') 
+     
+@endsection
